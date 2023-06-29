@@ -39,7 +39,7 @@ class NgcDetailsCensusSpider(scrapy.Spider):
                 name = row.css('td.total-cell span:nth-child(1)::text').get()
                 print("New name: " + str(name))
             denom = row.css('td:nth-child(2)::text').get()
-            desig = row.xpath('//td[3]/text()').get()
+            desig = row.css('td:nth-child(3)::text').get()
             total_num = row.css('td.census-only::text').get()
             counter += 1
             
@@ -58,7 +58,7 @@ class NgcDetailsCensusSpider(scrapy.Spider):
         request = scrapy.Request(
             "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/5m/data",
             callback=self.parse_details,
-            cb_kwargs=broad_dict
+            cb_kwargs={"broad_dict": broad_dict}
         )
         
         yield request
