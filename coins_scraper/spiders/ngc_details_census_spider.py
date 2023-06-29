@@ -35,9 +35,11 @@ class NgcDetailsCensusSpider(scrapy.Spider):
         # biggun
         for row in broad_detail_row:
             name = row.css('td span span.merged::text').get()
-            denom = row.xpath('//td[2]/text()').get()
+            if name is None:
+                row.css('td:nth-child(0) span::text').get()
+            denom = row.css('td:nth-child(2)::text').get()
             desig = row.xpath('//td[3]/text()').get()
-            total_num = row.css('td.census-only::text()').get()
+            total_num = row.css('td.census-only::text').get()
             counter += 1
             
             sub_dict = {}
@@ -110,12 +112,3 @@ class NgcDetailsCensusSpider(scrapy.Spider):
                             "num_au_details": narrow_value["num_au_details"],
                             "num_unc_details": narrow_value["num_unc_details"]}}
                     
-        
-        
-        
-"""
-How do I want the output data to look?
-
-
-
-"""
