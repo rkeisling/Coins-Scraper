@@ -4,7 +4,7 @@ import scrapy
 
 
 class QuotesSpider(scrapy.Spider):
-    name = "quotes"
+    name = "ngc_census"
 
     start_urls = [
             "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/5m/",
@@ -18,4 +18,5 @@ class QuotesSpider(scrapy.Spider):
                 "tags": quote.css("div.tags a.tag::text").getall()
             }
         
-        for row in response.css("div.pinned")
+        for row in response.css("div.pinned"):
+            pass
