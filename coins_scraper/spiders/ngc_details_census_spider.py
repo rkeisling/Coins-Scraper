@@ -36,7 +36,7 @@ class NgcDetailsCensusSpider(scrapy.Spider):
         for row in broad_detail_row:
             name = row.css('td span span.merged::text').get()
             if name is None:
-                row.css('td:nth-child(0) span::text').get()
+                row.css('td.total-cell span::text').get()
             denom = row.css('td:nth-child(2)::text').get()
             desig = row.xpath('//td[3]/text()').get()
             total_num = row.css('td.census-only::text').get()
@@ -51,6 +51,8 @@ class NgcDetailsCensusSpider(scrapy.Spider):
                                  "index": counter}
             
             broad_dict.update(sub_dict)
+
+        print("Broad dictionary: " + str(broad_dict))
 
         counter = 0
         
@@ -79,6 +81,7 @@ class NgcDetailsCensusSpider(scrapy.Spider):
     
             narrow_dict.update(sub_dict)
         
+        print("Narrow dictionary: " + str(narrow_dict))
         
         # keys = set(broad_dict.keys()) & set(narrow_dict.keys())
         
@@ -93,9 +96,9 @@ class NgcDetailsCensusSpider(scrapy.Spider):
         #                                "num_vf_details": narrow_dict["num_vf_details"],
         #                                "num_xf_details": narrow_dict["num_xf_details"],
         #                                "num_au_details": narrow_dict["num_au_details"],
-        #                                "num_unc_details": narrow_dict["num_unc_details"]} for k in keys}
+        #                                "num_unc_details": narrow_dict["num_unc_details"]} for k in keys if broad_dict[k]["index"] == narrow_dict[k]["index"]}
         
-        master_dict = {}
+        print("Master dictionary: " + str(master))
         
         for broad_key, broad_value in broad_dict.items():
             for narrow_key, narrow_value in narrow_dict.items():
