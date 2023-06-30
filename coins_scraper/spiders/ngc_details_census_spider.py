@@ -64,30 +64,14 @@ class NgcDetailsCensusSpider(scrapy.Spider):
         counter = 0
         
         for row in narrow_detail_row:
-            num_pr_ag_details = row.css('td.grade-PrAg::text').get()
-            if (num_pr_ag_details is None):
-                num_pr_ag_details = 0
-            num_g_details = row.css('td.grade-G::text').get()
-            if (num_g_details is None):
-                num_g_details = 0
-            num_vg_details = row.css('td.grade-VG::text').get()
-            if (num_vg_details is None):
-                num_vg_details = 0
-            num_f_details = row.css('td.grade-F::text').get()
-            if (num_f_details is None):
-                num_f_details = 0
-            num_vf_details = row.css('td.grade-VF::text').get()
-            if (num_vf_details is None):
-                num_vf_details = 0
-            num_xf_details = row.css('td.grade-XF::text').get()
-            if (num_xf_details is None):
-                num_xf_details = 0
-            num_au_details = row.css('td.grade-AU::text').get()
-            if (num_au_details is None):
-                num_au_details = 0
-            num_unc_details = row.css('td.grade-UNC::text').get()
-            if (num_unc_details is None):
-                num_unc_details = 0
+            num_pr_ag_details = row.css('td.grade-PrAg::text').get() or 0
+            num_g_details = row.css('td.grade-G::text').get() or 0
+            num_vg_details = row.css('td.grade-VG::text').get() or 0
+            num_f_details = row.css('td.grade-F::text').get() or 0
+            num_vf_details = row.css('td.grade-VF::text').get() or 0
+            num_xf_details = row.css('td.grade-XF::text').get() or 0
+            num_au_details = row.css('td.grade-AU::text').get() or 0
+            num_unc_details = row.css('td.grade-UNC::text').get() or 0
             
             counter += 1
             
@@ -122,22 +106,3 @@ class NgcDetailsCensusSpider(scrapy.Spider):
                                         "num_unc_details": narrow_dict[k]["num_unc_details"],
                                         "origin": broad_dict[k]["origin"],
                                         "last_updated_at": str(datetime.datetime.now())} for k in keys if broad_dict[k]["index"] == narrow_dict[k]["index"]}
-        
-        
-        # nested loops method
-        # for broad_key, broad_value in broad_dict.items():
-        #     for narrow_key, narrow_value in narrow_dict.items():
-        #         if broad_key == narrow_key:
-        #             yield { broad_value["name"]: {"denomination": broad_value["denomination"],
-        #                     "designation": broad_value["designation"],
-        #                     "total_number": broad_value["total_number"],
-        #                     "origin": broad_value["origin"],
-        #                     "num_pr_ag_details": narrow_value["num_pr_ag_details"],
-        #                     "num_g_details": narrow_value["num_g_details"],
-        #                     "num_vg_details": narrow_value["num_vg_details"],
-        #                     "num_f_details": narrow_value["num_f_details"],
-        #                     "num_vf_details": narrow_value["num_vf_details"],
-        #                     "num_xf_details": narrow_value["num_xf_details"],
-        #                     "num_au_details": narrow_value["num_au_details"],
-        #                     "num_unc_details": narrow_value["num_unc_details"],
-        #                     "last_updated_at": str(datetime.datetime.now())} }

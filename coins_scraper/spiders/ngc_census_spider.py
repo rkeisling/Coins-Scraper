@@ -5,7 +5,7 @@ import datetime
 import time
 
 
-class NgcDetailsCensusSpider(scrapy.Spider):
+class NgcCensusSpider(scrapy.Spider):
     name = "ngc_census"
 
     start_urls = [
