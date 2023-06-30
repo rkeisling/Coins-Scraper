@@ -1,3 +1,4 @@
 coins-scraper-env
 *.pyc
 *.json
+*.html
