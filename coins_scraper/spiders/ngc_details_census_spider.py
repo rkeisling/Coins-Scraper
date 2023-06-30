@@ -2,13 +2,19 @@ from pathlib import Path
 
 import scrapy
 import datetime
+import time
 
 
 class NgcDetailsCensusSpider(scrapy.Spider):
     name = "ngc_details_census"
 
     start_urls = [
-            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/5m/"
+            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/5m/",
+            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/10m/",
+            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/20m/",
+            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/2m/",
+            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/3m/",
+            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/g5m/"
         ]
     
     def parse(self, response):
@@ -42,7 +48,7 @@ class NgcDetailsCensusSpider(scrapy.Spider):
             broad_dict.update(sub_dict)
 
         request = scrapy.Request(
-            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/5m/data",
+            response.request.url + "data",
             callback=self.parse_details,
             cb_kwargs={"broad_dict": broad_dict}
         )

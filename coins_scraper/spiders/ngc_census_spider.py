@@ -9,7 +9,12 @@ class NgcDetailsCensusSpider(scrapy.Spider):
     name = "ngc_census"
 
     start_urls = [
-            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/5m/"
+            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/5m/",
+            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/10m/",
+            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/20m/",
+            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/2m/",
+            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/3m/",
+            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/g5m/"
         ]
     
     def parse(self, response):
