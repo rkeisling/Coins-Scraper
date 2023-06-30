@@ -47,6 +47,7 @@ class NgcDetailsCensusSpider(scrapy.Spider):
             broad_dict.update(sub_dict)
 
         end = time.time()
+        # print("Broad dictionary: " + str(broad_dict))
         print("Gathering broad rows took: " + str(end - start))
 
         request = scrapy.Request(
@@ -153,22 +154,21 @@ class NgcDetailsCensusSpider(scrapy.Spider):
                                  "vg_star": vg_star,
                                  "f_base": f_base,
                                  "f_star": f_star,
-                                 "vf_base": pr_ag_base,
-                                 "vf_base": pr_ag_star,
-                                 "vf_star": g_base,
-                                 "forty_base": g_star,
-                                 "forty_star": vg_base,
-                                 "forty_five_base": vg_star,
-                                 "forty_five_star": f_base,
-                                 "forty_five_plus": f_star,
-                                 "forty_five_plus_star": pr_ag_base,
-                                 "fifty_base": pr_ag_star,
-                                 "fifty_star": g_base,
-                                 "fifty_plus": g_star,
-                                 "fifty_plus_star": vg_base,
-                                 "fifty_three_base": vg_star,
-                                 "fifty_three_star": f_base,
-                                 "fifty_three_plus": f_star,
+                                 "vf_base": vf_base,
+                                 "vf_star": vf_star,
+                                 "forty_base": forty_base,
+                                 "forty_star": forty_star,
+                                 "forty_five_base": forty_five_base,
+                                 "forty_five_star": forty_five_star,
+                                 "forty_five_plus": forty_five_plus,
+                                 "forty_five_plus_star": forty_five_plus_star,
+                                 "fifty_base": fifty_base,
+                                 "fifty_star": fifty_star,
+                                 "fifty_plus": fifty_plus,
+                                 "fifty_plus_star": fifty_plus_star,
+                                 "fifty_three_base": fifty_three_base,
+                                 "fifty_three_star": fifty_three_star,
+                                 "fifty_three_plus": fifty_three_plus,
                                  "fifty_three_plus_star": fifty_three_plus_star,
                                  "fifty_five_base": fifty_five_base,
                                  "fifty_five_star": fifty_five_star,
@@ -225,6 +225,7 @@ class NgcDetailsCensusSpider(scrapy.Spider):
             narrow_dict.update(sub_dict)
             
         end = time.time()
+        # print("Narrow dictionary: " + str(narrow_dict))
         print("Gathering detailed rows took: " + str(end - start))
         
         keys = set(broad_dict.keys()) & set(narrow_dict.keys())
@@ -242,7 +243,6 @@ class NgcDetailsCensusSpider(scrapy.Spider):
                                         "vg_star": narrow_dict[k]["vg_star"],
                                         "f_base": narrow_dict[k]["f_base"],
                                         "f_star": narrow_dict[k]["f_star"],
-                                        "vf_base": narrow_dict[k]["vf_base"],
                                         "vf_base": narrow_dict[k]["vf_base"],
                                         "vf_star": narrow_dict[k]["vf_star"],
                                         "forty_base": narrow_dict[k]["forty_base"],
