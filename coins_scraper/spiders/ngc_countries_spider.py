@@ -2,12 +2,14 @@ from pathlib import Path
 
 import scrapy
 import datetime
-import time
 import re
 
 
-class NgcTypeCensusSpider(scrapy.Spider):
-    name = "ngc_type_census"
+class NgcCountriesSpider(scrapy.Spider):
+    # recommend to run with:
+    # scrapy crawl ncg_countries -O ngc_countries.json
+    
+    name = "ngc_countries"
 
     start_urls = [
             "https://www.ngccoin.com/census/"
@@ -25,47 +27,23 @@ class NgcTypeCensusSpider(scrapy.Spider):
 
         
         yield from response.follow_all(filtered_links, self.parse_further_links)
-        
-        # links_list = []
-        
-        # for link in alphabetical_links:
-        #     sub_dict = {"alpha_link": link.css("::href").get(),
-        #                 "name_of_category": link.css("div span:nth-child(1)::text").get(),
-        #                 "num_results_in_category": link.css("div span::nth-child(1)::text").get()}
-            
-        #     links_list.append(sub_dict)
-        
-        # request = scrapy.Request(
-        #     response.request.url + "data",
-        #     callback=self.parse_details,
-        #     cb_kwargs={"links_list": links_list}
-        # )
-        
-        # yield request
-
-        
-                    
+         
     def parse_further_links(self, response):
-        # extract data from these dudes
-        # can't just follow link because the page is too advanced (no links to follow)
         details = response.css("div.subcategory-list div")
-        
-        print(details[0])
         
         letter = details.css("::attr(parent-name)").get()
         base_url = details.css("::attr(base-url)").get()
         
         url_to_follow = "https://ngccoin.com" + base_url + letter + "/" + "subcategories"
-        print(url_to_follow)
         
         yield response.follow(url_to_follow, self.parse_more_sublinks)
         
-
     def parse_more_sublinks(self, response):
         links_from_subcategory = response.css("div.subcategory-list div a")
         
         for link in links_from_subcategory:
             yield {
                 "country_name": link.css("::text").get(),
-                "link": link.css("::attr(href)").get()
+                "link": link.css("::attr(href)").get(),
+                "extracted_at": str(datetime.datetime.now())
             }
