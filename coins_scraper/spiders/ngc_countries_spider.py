@@ -45,5 +45,5 @@ class NgcCountriesSpider(scrapy.Spider):
             yield {
                 "country_name": link.css("::text").get(),
                 "link": link.css("::attr(href)").get(),
-                "extracted_at": str(datetime.datetime.now())
+                "last_updated_at": str(datetime.datetime.now())
             }
