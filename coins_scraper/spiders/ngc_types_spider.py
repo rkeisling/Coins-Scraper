@@ -22,7 +22,8 @@ class NgcTypesSpider(scrapy.Spider):
     print(start_urls)
     
     def parse(self, response):
-        type_links = response.css("div.set-type")
+        # exclude headers
+        type_links = response.css('div.set-type:not(.set-type-header)')
         
         for type_link in type_links:
             href = type_link.css("a::attr(href)").get()
