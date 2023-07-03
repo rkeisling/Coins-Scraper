@@ -13,6 +13,9 @@ def get_country_urls(filename):
             return json.loads(fin.read())
 
 class NgcTypesSpider(scrapy.Spider):
+    # recommend to run with:
+    # scrapy crawl ngc_types -O ngc_types.json
+    
     name = "ngc_types"
 
     start_urls = [
@@ -34,9 +37,9 @@ class NgcTypesSpider(scrapy.Spider):
             stripped_country = country.replace("/", "")
             
             yield {
-                "country_name": stripped_country,
-                "denomination": denomination,
+                "country_name": stripped_country if "united-states" not in response.request.url else "united-states",
+                "denomination": denomination if "united-states" not in response.request.url else f"{denomination} - {stripped_country}",
                 "population": count,
-                "link": "https://ngccoin.com" + href,
+                "link": f"https://ngccoin.com{href}" if "united-states" not in response.request.url else f"https://ngccoin.com/census/united-states/{stripped_country}/{href}",
                 "extracted_at": str(datetime.datetime.now())
             }
