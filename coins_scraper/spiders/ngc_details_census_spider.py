@@ -91,18 +91,24 @@ class NgcDetailsCensusSpider(scrapy.Spider):
         
         keys = set(broad_dict.keys()) & set(narrow_dict.keys())
         
+        split_url = response.request.url.split("/")
+        
+        type_name = split_url[-5].upper()
+        
+        denom = split_url[-3].upper()
+        
         # dictionary comprehension method
         # is faster than the nested loops
-        yield { broad_dict[k]["name"]: {"denomination": broad_dict[k]["denomination"],
-                                        "designation": broad_dict[k]["designation"],
-                                        "total_number": broad_dict[k]["total_number"],
-                                        "num_pr_ag_details": narrow_dict[k]["num_pr_ag_details"],
-                                        "num_g_details": narrow_dict[k]["num_g_details"],
-                                        "num_vg_details": narrow_dict[k]["num_vg_details"],
-                                        "num_f_details": narrow_dict[k]["num_f_details"],
-                                        "num_vf_details": narrow_dict[k]["num_vf_details"],
-                                        "num_xf_details": narrow_dict[k]["num_xf_details"],
-                                        "num_au_details": narrow_dict[k]["num_au_details"],
-                                        "num_unc_details": narrow_dict[k]["num_unc_details"],
-                                        "origin": broad_dict[k]["origin"],
-                                        "last_updated_at": str(datetime.datetime.now())} for k in keys if broad_dict[k]["index"] == narrow_dict[k]["index"]}
+        yield { f"{type_name} - {denom}" : { broad_dict[k]["name"]: {"denomination": broad_dict[k]["denomination"],
+                                                                     "designation": broad_dict[k]["designation"],
+                                                                     "total_number": broad_dict[k]["total_number"],
+                                                                     "num_pr_ag_details": narrow_dict[k]["num_pr_ag_details"],
+                                                                     "num_g_details": narrow_dict[k]["num_g_details"],
+                                                                     "num_vg_details": narrow_dict[k]["num_vg_details"],
+                                                                     "num_f_details": narrow_dict[k]["num_f_details"],
+                                                                     "num_vf_details": narrow_dict[k]["num_vf_details"],
+                                                                     "num_xf_details": narrow_dict[k]["num_xf_details"],
+                                                                     "num_au_details": narrow_dict[k]["num_au_details"],
+                                                                     "num_unc_details": narrow_dict[k]["num_unc_details"],
+                                                                     "origin": broad_dict[k]["origin"],
+                                                                     "last_updated_at": str(datetime.datetime.now())} for k in keys if broad_dict[k]["index"] == narrow_dict[k]["index"]}}
