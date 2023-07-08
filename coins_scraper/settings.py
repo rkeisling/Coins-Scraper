@@ -66,6 +66,9 @@ AUTOTHROTTLE_ENABLED = True
 #ITEM_PIPELINES = {
 #    "coins_scraper.pipelines.CoinsScraperPipeline": 300,
 #}
+ITEM_PIPELINES = {
+  "coins_scraper.pipelines.MongoDBPipeline": 500
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -92,3 +95,8 @@ AUTOTHROTTLE_ENABLED = True
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
+
+MONGO_HOST="localhost"
+MONGO_PORT=27017
+MONGODB_URI=f"{MONGO_HOST}:{MONGO_PORT}"
+MONGO_DB_NAME="CoinsScraper"
