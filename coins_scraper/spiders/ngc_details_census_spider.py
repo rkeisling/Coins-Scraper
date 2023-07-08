@@ -2,26 +2,38 @@ from pathlib import Path
 
 import scrapy
 import datetime
+import os
+import json
 import time
 
+def get_types(filename):
+        current_dir = os.getcwd()
+        print(current_dir)
+        json_file_path = os.path.abspath(os.path.join(current_dir, filename))
+        with open(json_file_path) as fin:
+            return json.loads(fin.read())
+
+def convert_to_details_links(filename):
+    details_links = []
+    
+    for each in get_types(filename):
+        link = each["link"]
+        link = link.replace("census", "details-census")
+        details_links.append(link)
+        
+    return details_links
 
 class NgcDetailsCensusSpider(scrapy.Spider):
     name = "ngc_details_census"
 
-    start_urls = [
-            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/5m/",
-            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/10m/",
-            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/20m/",
-            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/2m/",
-            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/3m/",
-            "https://www.ngccoin.com/details-census/world/germany-states-1871-1925/sc-144/g5m/"
-        ]
+    start_urls = convert_to_details_links("ngc_types_test_run.json")
     
     def parse(self, response):
         broad_detail_row = response.css('div.details-census div.pinned table tbody tr.ms')
 
         broad_dict = {}
         counter = 0
+        start = time.time()
         
         for row in broad_detail_row:
             name = row.css('td span span.merged::text').get()
@@ -47,6 +59,9 @@ class NgcDetailsCensusSpider(scrapy.Spider):
             
             broad_dict.update(sub_dict)
 
+        end = time.time()
+        print("Gathering broad rows took: " + str(end - start))
+
         request = scrapy.Request(
             response.request.url + "data",
             callback=self.parse_details,
@@ -54,14 +69,13 @@ class NgcDetailsCensusSpider(scrapy.Spider):
         )
         
         yield request
-
-        
-                    
+       
     def parse_details(self, response, broad_dict):
         narrow_detail_row = response.css('body table tbody tr.ms')
         
         narrow_dict = {}
         counter = 0
+        start = time.time()
         
         for row in narrow_detail_row:
             num_pr_ag_details = row.css('td.grade-PrAg::text').get() or 0
@@ -88,6 +102,9 @@ class NgcDetailsCensusSpider(scrapy.Spider):
                                  "index": counter}
     
             narrow_dict.update(sub_dict)
+        
+        end = time.time()
+        print("Gathering detailed rows took: " + str(end - start))
         
         keys = set(broad_dict.keys()) & set(narrow_dict.keys())
         

@@ -2,19 +2,22 @@ from pathlib import Path
 
 import scrapy
 import datetime
+import json
+import os
 import time
 
+def get_types(filename):
+        current_dir = os.getcwd()
+        print(current_dir)
+        json_file_path = os.path.abspath(os.path.join(current_dir, filename))
+        with open(json_file_path) as fin:
+            return json.loads(fin.read())
 
 class NgcCensusSpider(scrapy.Spider):
     name = "ngc_census"
 
     start_urls = [
-            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/5m/",
-            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/10m/",
-            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/20m/",
-            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/2m/",
-            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/3m/",
-            "https://www.ngccoin.com/census/world/germany-states-1871-1925/sc-144/g5m/"
+            each["link"] for each in get_types("ngc_types_test_run.json")
         ]
     
     def parse(self, response):
@@ -46,13 +49,9 @@ class NgcCensusSpider(scrapy.Spider):
                                  "origin": origin,
                                  "index": counter}
             
-            # for funsies
-            # print(str(sub_dict))
-            
             broad_dict.update(sub_dict)
 
         end = time.time()
-        # print("Broad dictionary: " + str(broad_dict))
         print("Gathering broad rows took: " + str(end - start))
 
         request = scrapy.Request(
@@ -225,12 +224,9 @@ class NgcCensusSpider(scrapy.Spider):
                                  "seventy_star": seventy_star,
                                  "index": counter}
     
-            # print(str(sub_dict))
-            
             narrow_dict.update(sub_dict)
             
         end = time.time()
-        # print("Narrow dictionary: " + str(narrow_dict))
         print("Gathering detailed rows took: " + str(end - start))
         
         keys = set(broad_dict.keys()) & set(narrow_dict.keys())
